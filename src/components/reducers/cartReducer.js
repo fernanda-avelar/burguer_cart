@@ -1,6 +1,7 @@
-import Item1 from "../../images/burguer1.png";
-// import Item2 from "../../images/item2.jpg";
-// import Item3 from "../../images/item3.jpg";
+import xbacon from "../../images/burguer1.png";
+import xeggbacon from "../../images/burguer4.png";
+import xburg from "../../images/burguer3.png";
+import xegg from "../../images/burguer2.png";
 // import Item4 from "../../images/item4.jpg";
 // import Item5 from "../../images/item5.jpg";
 // import Item6 from "../../images/item6.jpg";
@@ -60,7 +61,7 @@ const initState = {
       carne: 1,
       alface:0,
       bacon:1,
-      img: Item1
+      img: xbacon
     },
     {
       id: 2,
@@ -72,7 +73,7 @@ const initState = {
       carne: 1,
       alface:0,
       bacon:0,
-      img: Item1
+      img: xburg
     },
     {
       id: 3,
@@ -84,7 +85,7 @@ const initState = {
       carne: 1,
       alface:0,
       bacon:0,
-      img: Item1
+      img: xegg
     },
     {
       id: 4,
@@ -96,7 +97,7 @@ const initState = {
       carne: 1,
       alface:1,
       bacon:1,
-      img: Item1
+      img: xeggbacon
     }
   ],
   addedItems: [],

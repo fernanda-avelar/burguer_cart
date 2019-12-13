@@ -5,3 +5,9 @@
 .ColumWid {
     width: 50%;
 }
+
+.card .card-image .card-title {
+    color:  #633E38!important;
+    background: #FDB619!important;
+    font-family: 'Lilita One', cursive!important;
+}

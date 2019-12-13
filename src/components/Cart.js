@@ -118,13 +118,15 @@ class Cart extends Component {
                       <div className="item-img">
                         <img src={item.img} alt={item.img} className="" />
                       </div>
-                      <span className="title">{item.title}</span>
+                      <span className="title">
+                        <b>{item.title}</b>
+                      </span>
                       <p>{item.desc}</p>
                       <p>
-                        <b>Price: {item.price}$</b>
+                        <b>Preço: {item.price}$</b>
                       </p>
                       <p>
-                        <b>Quantity: {item.quantity}</b>
+                        <b>Quantidade: {item.quantity}</b>
                       </p>
                       <div className="add-remove">
                         <Link to="/cart">
@@ -269,7 +271,9 @@ class Cart extends Component {
                             />
                           </Link>
                         </Table.Cell>
-                        <Table.Cell><Button content="Alface" labelPosition="left" /></Table.Cell>
+                        <Table.Cell>
+                          <Button content="Alface" labelPosition="left" />
+                        </Table.Cell>
                         <Table.Cell>
                           <Link to="/cart">
                             <Button
@@ -300,7 +304,7 @@ class Cart extends Component {
     return (
       <div className="container">
         <div className="cart">
-          <h5>You have ordered:</h5>
+          <h5>Items do seu pedido:</h5>
           <ul className="collection">{addedItems}</ul>
         </div>
         <Recipe />
