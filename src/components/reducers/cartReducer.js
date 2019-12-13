@@ -58,6 +58,8 @@ const initState = {
       price: getPrice([2, 3, 5, 6]),
       queijo: 1,
       carne: 1,
+      alface:0,
+      bacon:1,
       img: Item1
     },
     {
@@ -66,22 +68,34 @@ const initState = {
       ing: [3, 5, 6],
       desc: getIng([3, 5, 6]),
       price: getPrice([3, 5, 6]),
-      queijo:1,
-      carne:1,
+      queijo: 1,
+      carne: 1,
+      alface:0,
+      bacon:0,
       img: Item1
     },
     {
       id: 3,
       title: "X-Egg",
+      ing:[3, 4, 5, 6],
       desc: getIng([3, 4, 5, 6]),
       price: getPrice([3, 4, 5, 6]),
+      queijo: 1,
+      carne: 1,
+      alface:0,
+      bacon:0,
       img: Item1
     },
     {
       id: 4,
       title: "X-Egg Bacon",
+      ing: [1, 2, 3, 4, 5, 6],
       desc: getIng([1, 2, 3, 4, 5, 6]),
       price: getPrice([1, 2, 3, 4, 5, 6]),
+      queijo: 1,
+      carne: 1,
+      alface:1,
+      bacon:1,
       img: Item1
     }
   ],
@@ -92,7 +106,7 @@ const initState = {
 function promoCheese(itemToEdit){
 
   // Count cheese
-  debugger;
+  // debugger;
   var count = 0;
   for (var i = 0; i < itemToEdit.ing.length; ++i) {
     if (itemToEdit.ing[i] === 5) count++;
@@ -111,8 +125,9 @@ function promoCheese(itemToEdit){
   }
   // console.log(count)
 
-  var toExclude = itemToEdit.queijo/3;
+  var toExclude = Math.floor(itemToEdit.queijo/3);
 
+  if(toExclude > 0 && itemToEdit.title.includes("PROMO_CHEESE")=== false) itemToEdit.title = itemToEdit.title + " PROMO_CHEESE"
   // console.log(toExclude);
 
   while(toExclude > 0){
@@ -130,7 +145,7 @@ function promoCheese(itemToEdit){
 function promoMeat(itemToEdit){
 
   // Count cheese
-  debugger;
+  // debugger;
   var count = 0;
   for (var i = 0; i < itemToEdit.ing.length; ++i) {
     if (itemToEdit.ing[i] === 5) count++;
@@ -148,10 +163,12 @@ function promoMeat(itemToEdit){
 
   }
   // console.log(count)
-
-  var toExclude = itemToEdit.carne/3;
+  debugger;
+  var toExclude = Math.floor(itemToEdit.carne/3);
 
   // console.log(toExclude);
+
+  if(toExclude > 0 && itemToEdit.title.includes("PROMO_MEAT")=== false) itemToEdit.title = itemToEdit.title + " PROMO_MEAT"
 
   while(toExclude > 0){
     var index = itemToEdit.ing.indexOf(5);
@@ -160,6 +177,21 @@ function promoMeat(itemToEdit){
     }
     toExclude--;
   }
+
+  console.log(itemToEdit);
+  return itemToEdit;
+
+}
+
+function promoLight(itemToEdit){
+
+  if(itemToEdit.alface > 0 && itemToEdit.bacon === 0) {
+    let price = itemToEdit.price;
+    debugger;
+    itemToEdit.price = price*0.9;
+    itemToEdit.title = itemToEdit.title + " PROMO_LIGHT"
+  }
+
   console.log(itemToEdit);
   return itemToEdit;
 
@@ -168,7 +200,8 @@ function promoMeat(itemToEdit){
 const cartReducer = (state = initState, action) => {
   //INSIDE HOME COMPONENT
   if (action.type === ADD_TO_CART) {
-    debugger; //INSIDE HOME _ ADD
+    // debugger; 
+    //INSIDE HOME _ ADD
     let addedItem = state.items.find(item => item.id === action.id);
     //check if the action id exists in the addedItems
     let existed_item = state.addedItems.find(item => action.id === item.id);
@@ -206,7 +239,8 @@ const cartReducer = (state = initState, action) => {
   }
 
   if (action.type === REMOVE_ITEM) {
-    debugger;//INSIDE CART
+    // debugger;
+    //INSIDE CART
     let itemToRemove = state.addedItems.find(item => action.id === item.id);
     let new_items = state.addedItems.filter(item => action.id !== item.id);
 
@@ -220,46 +254,31 @@ const cartReducer = (state = initState, action) => {
     };
   }
 
-  //EDIT
-  if (action.type === EDIT_ITEM) {
-    debugger;
-    var itemToEdit = state.addedItems.find(item => action.id === item.id);
-    console.log("Edit");
-    console.log(itemToEdit);
-
-    let newTotal = state.total - itemToEdit.price;
-    itemToEdit.price = getPrice(itemToEdit.ing);
-    newTotal = state.total + itemToEdit.price;
-
-    return {
-      ...state,
-      total: newTotal
-    };
-  }
-
-
-  
   //CONFIRM EDIT
   if (action.type === CONFIRM_EDIT) {
     debugger;
     let itemToEdit = state.addedItems.find(item => action.id === item.id);
-    // let new_items = state.addedItems.filter(item => action.id !== item.id);
 
     console.log("CONFIRM");
     // console.log(itemToEdit);
-    let newTotal = state.total - itemToEdit.price;
+    let newTotal = 0;
+
+    if(state.total === itemToEdit.price*itemToEdit.quantity) newTotal=0;
+    else newTotal = state.total - itemToEdit.price*itemToEdit.quantity;
 
     itemToEdit = promoCheese(itemToEdit);
     itemToEdit = promoMeat(itemToEdit);
+    itemToEdit = promoLight(itemToEdit)
     // console.log(itemToEdit);
     itemToEdit.price = getPrice(itemToEdit.ing);
 
 
     // itemToEdit.id = 5;
-    itemToEdit.title = "EDITADO " +  itemToEdit.title;
+    // if(!itemToEdit.title.includes("EDITADO")) itemToEdit.title = "EDITADO " +  itemToEdit.title;
     // state.addedItems.push(itemToEdit);
 
-    newTotal =+ itemToEdit.price;
+    newTotal = itemToEdit.price*itemToEdit.quantity + newTotal;
+
     return {
       ...state,
       total: newTotal
@@ -268,7 +287,7 @@ const cartReducer = (state = initState, action) => {
 
   
   if (action.type === SUB_QUANTITY) {
-    debugger;
+    // debugger;
     let addedItem = state.items.find(item => item.id === action.id);
     //if the qt == 0 then it should be removed
     if (addedItem.quantity === 1) {
